@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
+
 import './App.css'
 import DevinNavbar from '../src/components/Navbar'
 import { WebsiteService } from './services/WebsiteService'
@@ -9,7 +10,6 @@ function App() {
 
   return (
     <>
-      
       <div>
         <DevinNavbar />
         <WebsiteService />
