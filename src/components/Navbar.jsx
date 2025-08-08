@@ -44,7 +44,6 @@ const DevinNavbar = () => {
   const [navIsDark, setNavIsDark] = useState(false);
   const navbarRef = useRef();
 
-  // Detect background to toggle font color (as before)
   useEffect(() => {
     const section = navbarRef.current;
     if (!section || typeof window === 'undefined') return;
@@ -56,7 +55,6 @@ const DevinNavbar = () => {
     return () => { observer.disconnect(); };
   }, []);
 
-  // Close dropdown on click outside
   useEffect(() => {
     const onClick = (e) => {
       if (
@@ -71,27 +69,18 @@ const DevinNavbar = () => {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
-  // Handle dropdown on hover (desktop)
   const handleDropdownEnter = (idx) => setOpenDropdown(idx);
   const handleDropdownLeave = () => setOpenDropdown(null);
 
-  // Color classes
   const textClass = navIsDark ? "text-white" : "text-gray-900";
   const hoverText = navIsDark ? "hover:text-gray-300" : "hover:text-blue-700";
   const dotColorClass = navIsDark ? "text-blue-400" : "text-blue-700";
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex justify-center pointer-events-none">
-      {/* Floating Navbar Container */}
-      <div
-        ref={navbarRef}
-        className={`
-          relative mt-6
-          w-full max-w-5xl
-          pointer-events-auto
-        `}
-      >
-        {/* Logo: floating outside and to the left */}
+      <div ref={navbarRef} className="relative mt-6 w-full max-w-6xl pointer-events-auto">
+
+        {/* Floating Logo */}
         <div className="absolute -left-16 top-0 flex items-center h-full z-50">
           <a
             href="/"
@@ -102,126 +91,89 @@ const DevinNavbar = () => {
           </a>
         </div>
 
-        {/* Main Glassmorphic Navbar */}
+        {/* Main Glass Navbar */}
         <nav
-          className={`
-            flex items-center justify-between
-            bg-white/10 backdrop-blur-2xl border border-white/30 rounded-2xl shadow-2xl
-            px-6 py-3
-            transition-all duration-500
-            z-40
-          `}
+          className="flex items-center justify-between bg-white/10 backdrop-blur-2xl border border-white/30 rounded-2xl shadow-2xl px-6 py-3 z-40 transition-all duration-500"
           style={{
             minHeight: '68px',
             boxShadow: '0 8px 32px 0 rgba(31,38,135,0.24)',
             background: 'rgba(255,255,255,0.14)',
           }}
         >
-          {/* LEFT: nav links */}
-          <div className="flex items-center space-x-1 md:space-x-5 pl-8">
-            <div className="hidden md:flex items-center space-x-2">
-              {NAV_ITEMS.map((item, idx) =>
-                item.dropdown ? (
-                  <div
-                    key={item.label}
-                    className="relative"
-                    onMouseEnter={() => handleDropdownEnter(idx)}
-                    onMouseLeave={handleDropdownLeave}
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex items-center space-x-5 pl-8">
+            {NAV_ITEMS.map((item, idx) =>
+              item.dropdown ? (
+                <div
+                  key={item.label}
+                  className="relative"
+                  onMouseEnter={() => handleDropdownEnter(idx)}
+                  onMouseLeave={handleDropdownLeave}
+                >
+                  <button
+                    className={`flex items-center px-3 py-2 rounded-lg font-semibold text-base ${textClass} ${hoverText} transition-all duration-150 group relative`}
+                    aria-haspopup="true"
+                    aria-expanded={openDropdown === idx}
                   >
-                    <button
-                      className={`
-                        flex items-center px-3 py-2 rounded-lg font-semibold
-                        text-base ${textClass} ${hoverText}
-                        transition-all duration-150 group
-                        focus:outline-none
-                        relative
-                      `}
-                      aria-haspopup="true"
-                      aria-expanded={openDropdown === idx}
-                    >
-                      {activePage.startsWith(item.label.toLowerCase()) && (
-                        <span className={`mr-2 text-sm ${dotColorClass}`}>&#9679;</span>
-                      )}
-                      {item.label}
-                      <ChevronDown className="ml-1 h-4 w-4" />
-                    </button>
-                    {openDropdown === idx && (
-                      <div
-                        className={`
-                          absolute left-0 mt-3 w-64 bg-white/80 backdrop-blur-xl border border-white/30 
-                          rounded-xl shadow-lg z-40 animate-fadeIn overflow-hidden
-                        `}
-                      >
-                        {item.dropdown.map((sub, i) => (
-                          <a
-                            href={sub.href}
-                            key={sub.label}
-                            className={`
-                              flex items-center px-6 py-3 text-gray-800 group-hover:text-blue-800 transition-all
-                              hover:bg-blue-50/70 hover:text-blue-800
-                              font-medium text-base
-                              ${activePage === sub.href ? 'font-bold bg-blue-100/60' : ''}
-                            `}
-                            onClick={() => setActivePage(sub.href)}
-                          >
-                            {activePage === sub.href && (
-                              <span className={`mr-2 text-sm ${dotColorClass}`}>&#9679;</span>
-                            )}
-                            {sub.label}
-                            <ChevronRight className="ml-auto h-4 w-4" />
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    onClick={() => setActivePage(item.href)}
-                    className={`
-                      px-3 py-2 rounded-lg font-semibold flex items-center text-base
-                      transition-all duration-150 ${textClass} ${hoverText} relative
-                    `}
-                  >
-                    {activePage === item.href && (
+                    {activePage.startsWith(item.label.toLowerCase()) && (
                       <span className={`mr-2 text-sm ${dotColorClass}`}>&#9679;</span>
                     )}
                     {item.label}
-                  </a>
-                )
-              )}
-            </div>
+                    <ChevronDown className="ml-1 h-4 w-4" />
+                  </button>
+                  {openDropdown === idx && (
+                    <div className="absolute left-0 mt-3 w-64 bg-white/80 backdrop-blur-xl border border-white/30 rounded-xl shadow-lg z-40 animate-fadeIn overflow-hidden">
+                      {item.dropdown.map((sub) => (
+                        <a
+                          href={sub.href}
+                          key={sub.label}
+                          className={`flex items-center px-6 py-3 text-gray-800 hover:bg-blue-50/70 hover:text-blue-800 font-medium text-base ${activePage === sub.href ? 'font-bold bg-blue-100/60' : ''}`}
+                          onClick={() => setActivePage(sub.href)}
+                        >
+                          {activePage === sub.href && (
+                            <span className={`mr-2 text-sm ${dotColorClass}`}>&#9679;</span>
+                          )}
+                          {sub.label}
+                          <ChevronRight className="ml-auto h-4 w-4" />
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  onClick={() => setActivePage(item.href)}
+                  className={`px-3 py-2 rounded-lg font-semibold text-base ${textClass} ${hoverText} flex items-center`}
+                >
+                  {activePage === item.href && (
+                    <span className={`mr-2 text-sm ${dotColorClass}`}>&#9679;</span>
+                  )}
+                  {item.label}
+                </a>
+              )
+            )}
           </div>
 
-          {/* RIGHT: Join Now Button */}
+          {/* Desktop Join Now */}
           <div className="hidden md:block ml-auto">
             <a
               href="/join"
-              className="
-                bg-gradient-to-r from-blue-600 to-blue-800 
-                text-white px-7 py-2 rounded-full font-semibold shadow-lg
-                hover:scale-105 transition-transform duration-300
-                border border-white/30 backdrop-blur-sm
-              "
+              className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-7 py-2 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform duration-300 border border-white/30 backdrop-blur-sm"
             >
               Join Now
             </a>
           </div>
 
-          {/* MOBILE: Join Now, hamburger */}
+          {/* Mobile Join Now + Hamburger */}
           <div className="flex md:hidden items-center ml-auto space-x-1">
             <a
               href="/join"
-              className="
-                bg-gradient-to-r from-blue-600 to-blue-800 text-white 
-                px-4 py-1.5 rounded-full font-semibold 
-                shadow hover:scale-105 transition-all
-              "
+              className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-4 py-1.5 rounded-full font-semibold shadow hover:scale-105 transition-all"
             >
               Join Now
             </a>
-            {/* Hamburger */}
             <button
               className="ml-1 rounded-full p-2 bg-white/30"
               onClick={() => setMobileMenu(!mobileMenu)}
@@ -230,101 +182,59 @@ const DevinNavbar = () => {
               {mobileMenu ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
+        </nav>
 
-          {/* Mobile Navigation */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden border-t border-white/20">
-              <div className="px-6 py-6 space-y-4">
-                <a href="#" className="block text-white/90 hover:text-white transition-all duration-300 font-medium py-2">
-                  Home
-                </a>
-                
-                {/* Mobile Product Dropdown */}
-                <div>
-                  <button
-                    onClick={() => toggleDropdown('mobile-product')}
-                    className="flex items-center justify-between w-full text-white/90 hover:text-white transition-all duration-300 font-medium py-2"
-                  >
-                    Product
-                    <ChevronDown className="h-4 w-4" />
-                  </button>
-                  {activeDropdown === 'mobile-product' && (
-                    <div className="mt-2 pl-4 space-y-3">
-                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
-                        Features
-                      </a>
-                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
-                        Integrations
-                      </a>
-                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
-                        API
-                      </a>
+        {/* Mobile Menu Overlay */}
+        {mobileMenu && (
+          <div className="fixed inset-0 bg-black/80 z-40 p-6 pt-24 transition-all duration-500 backdrop-blur-2xl">
+            <div className="space-y-6">
+              {NAV_ITEMS.map((item, idx) => (
+                <div key={item.label}>
+                  {item.dropdown ? (
+                    <div>
+                      <button
+                        className="flex items-center justify-between w-full text-white font-semibold text-lg"
+                        onClick={() =>
+                          setDropdownInMobile(dropdownInMobile === idx ? null : idx)
+                        }
+                      >
+                        {item.label}
+                        <ChevronDown className="h-4 w-4" />
+                      </button>
+                      {dropdownInMobile === idx && (
+                        <div className="mt-2 ml-4 space-y-3">
+                          {item.dropdown.map((sub) => (
+                            <a
+                              key={sub.label}
+                              href={sub.href}
+                              className="block text-white/70 hover:text-white font-medium transition-all"
+                              onClick={() => {
+                                setActivePage(sub.href);
+                                setMobileMenu(false);
+                              }}
+                            >
+                              {sub.label}
+                            </a>
+                          ))}
+                        </div>
+                      )}
                     </div>
+                  ) : (
+                    <a
+                      href={item.href}
+                      className="block text-white text-lg font-semibold hover:text-blue-300"
+                      onClick={() => setMobileMenu(false)}
+                    >
+                      {item.label}
+                    </a>
                   )}
                 </div>
-
-                {/* Mobile Solutions Dropdown */}
-                <div>
-                  <button
-                    onClick={() => toggleDropdown('mobile-solutions')}
-                    className="flex items-center justify-between w-full text-white/90 hover:text-white transition-all duration-300 font-medium py-2"
-                  >
-                    Solutions
-                    <ChevronDown className="h-4 w-4" />
-                  </button>
-                  {activeDropdown === 'mobile-solutions' && (
-                    <div className="mt-2 pl-4 space-y-3">
-                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
-                        Enterprise
-                      </a>
-                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
-                        Startups
-                      </a>
-                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
-                        Developers
-                      </a>
-                    </div>
-                  )}
-                </div>
-
-                <a href="#" className="block text-white/90 hover:text-white transition-all duration-300 font-medium py-2">
-                  Pricing
-                </a>
-                <a href="#" className="block text-white/90 hover:text-white transition-all duration-300 font-medium py-2">
-                  Docs
-                </a>
-                <a href="#" className="block text-white/90 hover:text-white transition-all duration-300 font-medium py-2">
-                  Blog
-                </a>
-                
-                {/* Mobile CTA Buttons */}
-                <div className="pt-4 space-y-3">
-                  <button className="block w-full text-left text-white/90 hover:text-white transition-all duration-300 font-medium py-2">
-                    Sign In
-                  </button>
-                  <button className="block w-full bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-full font-medium hover:bg-white/30 transition-all duration-300 border border-white/30 text-center">
-                    Get Started
-                  </button>
-                </div>
-              </div>
+              ))}
             </div>
-          )}
-        </div>
-      </nav>
-
-      {/* Demo background to show glassmorphism effect */}
-      {/* <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-        <div className="absolute inset-0 opacity-20">
-          <div className="w-full h-full" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}></div>
-        </div>
-        <div className="pt-32 px-6 text-center text-white">
-          <h1 className="text-4xl font-bold mb-4">Glassmorphic Navigation</h1>
-          <p className="text-xl opacity-80">Beautiful transparent navbar with backdrop blur effect</p>
-        </div>
-      </div> */}
-    </div>
+          </div>
+        )}
+      </div>
+    </header>
   );
 };
 
