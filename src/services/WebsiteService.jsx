@@ -8,3 +8,4 @@ export const WebsiteService = () => {
     </div>
   );
 };
+export default WebsiteService;
