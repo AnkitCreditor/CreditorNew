@@ -1,7 +1,13 @@
-import React from 'react'
+import React from 'react';
+import Hero3D from '../components/WebsiteHero';
 
-export const LandingPage = () => {
+
+const LandingPage = () => {
   return (
-    <div>LandingPage</div>
-  )
-}
+    <div>
+      <Hero3D />
+    </div>
+  );
+};
+
+export default LandingPage;

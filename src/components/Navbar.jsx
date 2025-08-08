@@ -230,93 +230,101 @@ const DevinNavbar = () => {
               {mobileMenu ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
-        </nav>
 
-        {/* Mobile Nav Overlay: Blue Liquid Spread */}
-        {mobileMenu && (
-          <div className="fixed inset-0 z-40 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900/95 backdrop-blur-2xl animate-bgSpread">
-            <div className="flex flex-col px-8 pt-36 space-y-8">
-              {NAV_ITEMS.map((item, idx) =>
-                item.dropdown ? (
-                  <div key={item.label} className="relative">
-                    <button
-                      className="w-full flex items-center justify-between text-white font-semibold text-lg py-2"
-                      onClick={() =>
-                        setDropdownInMobile(dropdownInMobile === idx ? null : idx)
-                      }
-                    >
-                      <div className="flex items-center">
-                        {activePage.startsWith(item.label.toLowerCase()) && (
-                          <span className="mr-2 text-blue-200">&#9679;</span>
-                        )}
-                        {item.label}
-                      </div>
-                      <ChevronDown className="h-5 w-5" />
-                    </button>
-                    {dropdownInMobile === idx && (
-                      <div className="pl-7 mt-2 space-y-2">
-                        {item.dropdown.map((sub, i) => (
-                          <a
-                            key={sub.label}
-                            href={sub.href}
-                            className={`
-                              block text-white font-medium py-2 flex items-center
-                              hover:bg-blue-700/30 transition-all rounded
-                              ${activePage === sub.href ? 'bg-blue-500/20 font-bold' : ''}
-                            `}
-                            onClick={() => {
-                              setActivePage(sub.href);
-                              setMobileMenu(false);
-                              setDropdownInMobile(null);
-                            }}
-                          >
-                            {activePage === sub.href && (
-                              <span className="mr-2 text-blue-200">&#9679;</span>
-                            )}
-                            {sub.label}
-                            <ChevronRight className="ml-auto h-4 w-4" />
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="text-white font-semibold text-lg py-2 flex items-center"
-                    onClick={() => {
-                      setActivePage(item.href);
-                      setMobileMenu(false);
-                      setDropdownInMobile(null);
-                    }}
+          {/* Mobile Navigation */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden border-t border-white/20">
+              <div className="px-6 py-6 space-y-4">
+                <a href="#" className="block text-white/90 hover:text-white transition-all duration-300 font-medium py-2">
+                  Home
+                </a>
+                
+                {/* Mobile Product Dropdown */}
+                <div>
+                  <button
+                    onClick={() => toggleDropdown('mobile-product')}
+                    className="flex items-center justify-between w-full text-white/90 hover:text-white transition-all duration-300 font-medium py-2"
                   >
-                    {activePage === item.href && (
-                      <span className="mr-2 text-blue-200">&#9679;</span>
-                    )}
-                    {item.label}
-                  </a>
-                )
-              )}
+                    Product
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                  {activeDropdown === 'mobile-product' && (
+                    <div className="mt-2 pl-4 space-y-3">
+                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
+                        Features
+                      </a>
+                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
+                        Integrations
+                      </a>
+                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
+                        API
+                      </a>
+                    </div>
+                  )}
+                </div>
+
+                {/* Mobile Solutions Dropdown */}
+                <div>
+                  <button
+                    onClick={() => toggleDropdown('mobile-solutions')}
+                    className="flex items-center justify-between w-full text-white/90 hover:text-white transition-all duration-300 font-medium py-2"
+                  >
+                    Solutions
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                  {activeDropdown === 'mobile-solutions' && (
+                    <div className="mt-2 pl-4 space-y-3">
+                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
+                        Enterprise
+                      </a>
+                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
+                        Startups
+                      </a>
+                      <a href="#" className="block text-white/70 hover:text-white transition-all duration-200">
+                        Developers
+                      </a>
+                    </div>
+                  )}
+                </div>
+
+                <a href="#" className="block text-white/90 hover:text-white transition-all duration-300 font-medium py-2">
+                  Pricing
+                </a>
+                <a href="#" className="block text-white/90 hover:text-white transition-all duration-300 font-medium py-2">
+                  Docs
+                </a>
+                <a href="#" className="block text-white/90 hover:text-white transition-all duration-300 font-medium py-2">
+                  Blog
+                </a>
+                
+                {/* Mobile CTA Buttons */}
+                <div className="pt-4 space-y-3">
+                  <button className="block w-full text-left text-white/90 hover:text-white transition-all duration-300 font-medium py-2">
+                    Sign In
+                  </button>
+                  <button className="block w-full bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-full font-medium hover:bg-white/30 transition-all duration-300 border border-white/30 text-center">
+                    Get Started
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        )}
-        {/* Animations */}
-        <style>
-          {`
-            .animate-fadeIn { animation: fadeIn 0.22s; }
-            @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
-            .animate-bgSpread {
-              animation: bgSpread 0.7s cubic-bezier(0.32,0,0.67,0);
-            }
-            @keyframes bgSpread {
-              0% {clip-path: circle(0% at 88% 7%);}
-              100% {clip-path: circle(140% at 50% 50%);}
-            }
-          `}
-        </style>
-      </div>
-    </header>
+          )}
+        </div>
+      </nav>
+
+      {/* Demo background to show glassmorphism effect */}
+      {/* <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+        <div className="absolute inset-0 opacity-20">
+          <div className="w-full h-full" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}></div>
+        </div>
+        <div className="pt-32 px-6 text-center text-white">
+          <h1 className="text-4xl font-bold mb-4">Glassmorphic Navigation</h1>
+          <p className="text-xl opacity-80">Beautiful transparent navbar with backdrop blur effect</p>
+        </div>
+      </div> */}
+    </div>
   );
 };
 

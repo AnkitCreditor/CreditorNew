@@ -1,21 +1,27 @@
-import React from 'react'
-import { useState } from 'react'
-import './App.css'
-import DevinNavbar from '../src/components/Navbar'
-import { WebsiteService } from './services/WebsiteService'
+import React, { Suspense, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+
+import './App.css';
+import Navbar from '../src/components/Navbar';
+import ScrollToTop from './components/ScrollToTop';
+import Loader from './components/Loader';
+import LandingPage from '../src/pages/LandingPage';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   return (
     <>
-      
-      <div>
-        <DevinNavbar />
-        <WebsiteService />
-        </div>
+      <Navbar />
+      <ScrollToTop />
+
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+        </Routes>
+      </Suspense>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
