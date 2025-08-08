@@ -1,13 +1,10 @@
 import React from 'react';
-import Hero3D from '../components/WebsiteHero';
 
-
-const LandingPage = () => {
-  return (
-    <div>
-      <Hero3D />
-    </div>
-  );
-};
+const LandingPage = () => (
+  <div>
+    <h1>Welcome to the Landing Page</h1>
+    <p>This is your homepage content.</p>
+  </div>
+);
 
 export default LandingPage;
