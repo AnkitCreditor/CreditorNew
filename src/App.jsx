@@ -21,6 +21,7 @@ import WebsiteService from './services/WebsiteService';
 
 // You can also import ScrollToTop if required
 // import ScrollToTop from './components/ScrollToTop';
+import RoadmapCourses from './components/RoadmapCourses';
 
 function App() {
   return (
@@ -52,6 +53,10 @@ function App() {
             {/* <Route path="*" element={<NotFound />} /> */}
           </Routes>
         </div>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="courses" element={<RoadmapCourses />} />
+        </Routes>
       </Suspense>
     </>
   );
